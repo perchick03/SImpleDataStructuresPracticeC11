@@ -7,6 +7,6 @@ include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
 
-add_executable(Exercis main.cpp Tests/TestSimpleVector.cpp SimpleVector.cpp SimpleVector.h SimpleList.h Tests/TestSimpleList.cpp)
+add_executable(Exercis main.cpp Tests/TestSimpleVector.cpp SimpleVector.cpp SimpleVector.h SimpleList.h Tests/TestSimpleList.cpp SimpleStack.h Tests/TestSimpleStack.cpp)
 
 target_link_libraries(Exercis gtest gtest_main)
