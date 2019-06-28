@@ -38,7 +38,7 @@ TEST(EQUAL, simple_equal_list_test)
     EXPECT_TRUE(s1 != s2);
     SimpleList<std::string> s3{"hello"};
     EXPECT_TRUE(s1 != s3);
-    SimpleList<std::string> s4{"hello", "world", "!"};
+    SimpleList<std::string> s4{"hello", "world!"};
     EXPECT_TRUE(s1 != s4);
 }
 
