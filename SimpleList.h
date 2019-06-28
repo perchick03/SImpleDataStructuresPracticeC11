@@ -1,7 +1,3 @@
-//
-// Created by User on 6/27/2019.
-//
-
 #ifndef EXERCIS_SIMPLELIST_H
 #define EXERCIS_SIMPLELIST_H
 
@@ -12,54 +8,46 @@
 namespace simple
 {
 
-//emplace
-//insert
-//remove
-
 
 template<typename T>
 class SimpleList
 {
-public:
+private:
     struct Node
     {
-        T m_data;
-        Node* p_next = nullptr;
+        T mData;
+        Node* pNext = nullptr;
     };
 
 public:
 
     SimpleList() = default;
 
-    explicit SimpleList(const std::initializer_list<T>& il)
+    SimpleList(const std::initializer_list<T>& il)
         : SimpleList()
     {
         auto iter = il.begin();
-        pHead = new Node{*iter};
+        mHead = new Node{*iter};
         ++iter;
-        auto node = pHead;
+        auto node = mHead;
         for (; iter < il.end(); ++iter) {
-            node->p_next = new Node{*iter};
-            node = node->p_next;
+            node->pNext = new Node{*iter};
+            node = node->pNext;
         }
 
         mSize = il.size();
     }
 
-    ~SimpleList()
-    {
-        clear();
-    }
 
     SimpleList(const SimpleList& rhs)
         : SimpleList()
     {
-        pHead = new Node{rhs.pHead->m_data};
-        auto node = pHead;
-        auto rhs_node = rhs.pHead;
-        while(rhs_node = rhs_node->p_next){
-            node->p_next = new Node{rhs_node->m_data};
-            node = node->p_next;
+        mHead = new Node{rhs.mHead->mData};
+        auto node = mHead;
+        auto rhs_node = rhs.mHead;
+        while(rhs_node = rhs_node->pNext){
+            node->pNext = new Node{rhs_node->mData};
+            node = node->pNext;
         }
         mSize = rhs.mSize;
     }
@@ -84,45 +72,46 @@ public:
         return *this;
     }
 
-
-    void clear()
+    ~SimpleList()
     {
-        if(!pHead){
-            return;
-        }
-        auto node = pHead;
-        while(node = node->p_next)
-        {
-            delete pHead;
-            pHead = node;
-        }
-        mSize = 0;
-        pHead = nullptr;
+        clear();
     }
 
-    auto empty() const  { return mSize == 0; }
-    auto size() const   { return mSize; }
+    void clear() noexcept
+    {
+        auto p = std::exchange(mHead, nullptr);
+        while(p)
+        {
+            delete std::exchange(p, p->pNext);
+        }
+    }
 
-    //TODO: is this Kosher?
-    //https://stackoverflow.com/questions/8193102/initializer-list-and-move-semantics
-    //SimpleList(std::initializer_list<T>&& il) noexcept;
+    bool empty() const  { return mSize == 0; }
+    size_t size() const   { return mSize; }
 
 
     //T should support op==, op!=
     bool operator== (const SimpleList& rhs) const
     {
-        if(!pHead || !rhs.pHead || mSize != rhs.mSize){
+        if(!mHead || !rhs.mHead)
+        {
+            if(!mHead && !rhs.mHead){
+                return true;
+            }
             return false;
         }
-        auto this_node = pHead;
-        auto rhs_node = rhs.pHead;
+        if(mSize != rhs.mSize){
+            return false;
+        }
+        auto this_node = mHead;
+        auto rhs_node = rhs.mHead;
 
         while(this_node && rhs_node){
-            if(this_node->m_data != rhs_node->m_data){
+            if(this_node->mData != rhs_node->mData){
                 return false;
             }
-            this_node = this_node->p_next;
-            rhs_node = rhs_node->p_next;
+            this_node = this_node->pNext;
+            rhs_node = rhs_node->pNext;
         }
 
         return true;
@@ -133,7 +122,7 @@ public:
     friend void swap(SimpleList& rhs, SimpleList& lhs) noexcept
     {
         using std::swap;
-        swap(rhs.pHead, lhs.pHead);
+        swap(rhs.mHead, lhs.mHead);
         swap(rhs.mSize, lhs.mSize);
     }
 
@@ -141,17 +130,17 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const SimpleList& sl)
     {
         os<<"list "<<sl.mSize<<": {";
-        auto node = sl.pHead;
+        auto node = sl.mHead;
         while(node)
         {
-            os<<node->m_data<<(node->p_next ? ", " : "");
-            node = node->p_next;
+            os<<node->mData<<(node->pNext ? ", " : "");
+            node = node->pNext;
         }
         os<<"}\n";
         return os;
     }
 private:
-    Node* pHead = nullptr;
+    Node* mHead = nullptr;
     std::size_t mSize = 0;
 };
 
