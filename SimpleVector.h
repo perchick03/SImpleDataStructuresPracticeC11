@@ -49,7 +49,7 @@ public:
         return os;
     }
 
-    auto operator==(const SimpleVector& rhs) const noexcept
+    bool operator==(const SimpleVector& rhs) const noexcept
     {
         if(mSize != rhs.mSize){
             return false;
@@ -63,7 +63,7 @@ public:
 
         return true;
     }
-    auto operator!=(const SimpleVector& rhs) const noexcept
+    bool operator!=(const SimpleVector& rhs) const noexcept
     {
         return !(*this == rhs);
     }
