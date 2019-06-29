@@ -13,17 +13,17 @@ using namespace std;
 TEST(CTOR, simple_ctor_list)
 {
 
-    SimpleList<int> s0;
+    SimpleList<int> s0{};
     SimpleList<int> s1{1, 2, 3, 4};
-    cout<<s0<<s1;
-
+    SimpleList<int> s2{};
+    EXPECT_EQ(s0, s2);
 }
 
 TEST(CCTOR, simple_cctor_list)
 {
     SimpleList<int> s0{1, 2, 3, 4};
     SimpleList<int> s1{s0};
-    cout<<"s1: "<<s1<<"so: "<<s0;
+    EXPECT_EQ(s0, s1);
 }
 
 TEST(EQUAL, simple_equal_list_test)
