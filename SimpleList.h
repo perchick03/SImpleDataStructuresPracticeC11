@@ -26,32 +26,39 @@ public:
     SimpleList(const std::initializer_list<T>& il)
         : SimpleList()
     {
-        auto iter = il.begin();
-        mHead = new Node{*iter};
-        ++iter;
-        auto node = mHead;
-        for (; iter < il.end(); ++iter) {
-            node->pNext = new Node{*iter};
-            node = node->pNext;
-        }
+        if(il.size())
+        {
+            auto iter = il.begin();
+            mHead = new Node{*iter};
+            ++iter;
+            auto node = mHead;
+            for (; iter != il.end(); ++iter) {
+                node->pNext = new Node{*iter};
+                node = node->pNext;
+            }
 
-        mSize = il.size();
+            mSize = il.size();
+        }
     }
 
 
     SimpleList(const SimpleList& rhs)
         : SimpleList()
     {
-        mHead = new Node{rhs.mHead->mData};
-        auto node = mHead;
-        auto rhs_node = rhs.mHead;
-        while(rhs_node = rhs_node->pNext){
-            node->pNext = new Node{rhs_node->mData};
-            node = node->pNext;
+        if(!rhs.empty())
+        {
+            mHead = new Node{rhs.mHead->mData};
+            auto node = mHead;
+            for (auto rhs_node = rhs.mHead->pNext; rhs_node; rhs_node = rhs_node->pNext)
+            {
+                node->pNext = new Node{rhs_node->mData};
+                node = node->pNext;
+            }
+
+            mSize = rhs.mSize;
         }
-        mSize = rhs.mSize;
     }
-    SimpleList& operator=(const SimpleList& rhs) noexcept
+    SimpleList& operator=(const SimpleList& rhs)
     {
         auto tmp{rhs};
         swap(*this, tmp);
