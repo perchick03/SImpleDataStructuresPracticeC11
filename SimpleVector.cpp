@@ -31,14 +31,16 @@ SimpleVector& SimpleVector::operator=(const SimpleVector& rhs) {
 }
 
 SimpleVector::SimpleVector(SimpleVector&& rhs) noexcept
-    :SimpleVector(rhs.mSize)
 {
     swap(*this, rhs);
+    rhs.mSize = 0;
+    rhs.pVec = nullptr;
 }
 
 SimpleVector &SimpleVector::operator=(SimpleVector&& rhs) noexcept {
     swap(*this, rhs);
-
+    rhs.mSize = 0;
+    rhs.pVec = nullptr;
     return *this;
 }
 
